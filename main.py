@@ -2,16 +2,20 @@
 # imported webdriver class from selenium module
 from selenium import webdriver
 
-# import service class from selenium module
+# imported service class from selenium module
 from selenium.webdriver.chrome.service import Service
 
-# import By class from selenium module
+# imported By class from selenium module
 from selenium.webdriver.common.by import By
 
-from selenium.webdriver.common.keys import Keys
+# # imported Keys class from selenium module
+# from selenium.webdriver.common.keys import Keys
 
-# import time module
+# imported time module
 import time
+
+# imported random module
+import random
 
 
 # ---------------- WORKING WITH SELENIUM DRIVER ---------------- #
@@ -20,6 +24,69 @@ chromeDriverPath = "/Users/anshusinha/Documents/Python/Angela Yu/chromedriver_ma
 
 # created a driver object
 driver = webdriver.Chrome(service=Service(chromeDriverPath))
+
+
+# ---------------- DAY48: AUTOMATED COOKIE CLICKER ---------------- #
+# get method to launch the URL
+driver.get("http://orteil.dashnet.org/experiments/cookie/")
+
+# variable to store the cookie clicker URL  
+cookie = driver.find_element(By.ID, "cookie")
+
+# variable to store the count per second
+cps = driver.find_element(By.CSS_SELECTOR, "#cps").text
+
+"""function to buy items"""
+def buyItems():
+    # get all the store items
+    items = driver.find_elements(By.CSS_SELECTOR, "#store div:not(.grayed) b")
+
+    # list to store the store items prices
+    itemsPrices = [float(item.text.split("-")[1].split()[0].replace(",", "")) for item in items if item.text != ""]
+
+    # variable to store the max item price index
+    maxItemPriceIndex = itemsPrices.index(max(itemsPrices))
+
+    # click on the item
+    items[maxItemPriceIndex].click()
+
+# variable to store the timeout
+timeout = time.time() + 5
+
+# variable to store the total time
+totalTime = time.time() + 30
+
+
+"""loop to click the cookie and buy the items"""
+while totalTime >= time.time():
+    cookie.click()
+    if time.time() >= timeout:
+        buyItems()
+        timeout = time.time() + 5
+
+# print the count per second
+print(cps)
+
+# quit the browser
+driver.quit()
+
+
+
+
+
+
+
+
+
+##########################################################################################################################################################
+
+
+
+
+
+
+
+
 
 
 # ---------------- SCRAPPING DATA FROM AMAZON ---------------- #
@@ -60,8 +127,8 @@ driver = webdriver.Chrome(service=Service(chromeDriverPath))
 
 
 # ---------------- SCRAPPING DATA FROM WIKIPEDIA ---------------- #
-# get method to launch the URL
-driver.get("https://en.wikipedia.org/wiki/Main_Page")
+# # get method to launch the URL
+# driver.get("https://en.wikipedia.org/wiki/Main_Page")
 
 # # variable to store the search term
 # articlesNum = driver.find_element(By.XPATH, "//*[@id='articlecount']/a[1]")
@@ -86,9 +153,3 @@ driver.get("https://en.wikipedia.org/wiki/Main_Page")
 
 # # send enter key to the search bar
 # searchBar.send_keys(Keys.ENTER)
-
-# time to wait before closing the browser
-time.sleep(15)
-
-# quit the browser
-driver.quit()
