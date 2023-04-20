@@ -34,7 +34,7 @@ driver.get("http://orteil.dashnet.org/experiments/cookie/")
 cookie = driver.find_element(By.ID, "cookie")
 
 # variable to store the count per second
-cps = driver.find_element(By.CSS_SELECTOR, "#cps").text
+cps = driver.find_element(By.CSS_SELECTOR, "#cps")
 
 """function to buy items"""
 def buyItems():
@@ -65,7 +65,7 @@ while totalTime >= time.time():
         timeout = time.time() + 5
 
 # print the count per second
-print(cps)
+print(cps.text)
 
 # quit the browser
 driver.quit()
